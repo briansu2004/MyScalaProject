@@ -1,0 +1,2 @@
+# MyScalaProject
+ My Scala Project
