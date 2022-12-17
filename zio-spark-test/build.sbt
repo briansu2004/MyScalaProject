@@ -1,0 +1,39 @@
+val projectName = IO.readLines(new File("PROJECT_NAME")).head
+val v = IO.readLines(new File("VERSION")).head
+
+lazy val rootSettings = Seq(
+  organization := "com.sutek",
+  scalaVersion := "2.13.8",
+  version      := v
+)
+
+lazy val sparkVersion = "3.3.1"
+
+lazy val root = (project in file("."))
+  .settings(
+    name := projectName,
+    rootSettings,
+    libraryDependencies ++= Seq(
+      "io.univalence" %% "zio-spark" % "0.9.2",
+            // https://mvnrepository.com/artifact/org.apache.spark/spark-core
+            "org.apache.spark" %% "spark-core" % sparkVersion,
+            // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
+            "org.apache.spark" %% "spark-sql"    % sparkVersion,
+
+//      "org.apache.spark" %% "spark-core" % "3.3.1",
+//      "org.apache.spark" %% "spark-sql"  % "3.3.1",
+
+      // https://www.scalatest.org/
+      "org.scalatest"    %% "scalatest"    % "3.2.14" % Test
+    )
+  )
+
+
+//name         := "simple-app"
+//scalaVersion := "2.13.8"
+//
+//libraryDependencies ++= Seq(
+//  // "io.univalence"    %% "zio-spark"  % "X.X.X", //https://index.scala-lang.org/univalence/zio-spark/zio-spark
+//  "org.apache.spark" %% "spark-core" % "3.3.1",
+//  "org.apache.spark" %% "spark-sql"  % "3.3.1"
+//)
