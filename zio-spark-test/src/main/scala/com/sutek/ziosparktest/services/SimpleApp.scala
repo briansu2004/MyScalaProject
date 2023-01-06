@@ -1,7 +1,6 @@
 package com.sutek.ziosparktest.services
 
 import org.apache.spark.sql.Row
-
 import zio._
 import zio.spark.experimental
 import zio.spark.experimental.Pipeline
@@ -18,24 +17,31 @@ object SimpleApp extends ZIOAppDefault {
   val filePath: String = "src/main/resources/data.csv"
 
   def read: SIO[DataFrame] = SparkSession.read.schema[Person].withHeader.withDelimiter(";").csv(filePath)
-
   def transform(inputDs: DataFrame): Dataset[Person] = inputDs.as[Person]
 
   def output(transformedDs: Dataset[Person]): Task[Option[Person]] = transformedDs.headOption
 
   val pipeline: Pipeline[Row, Person, Option[Person]] = experimental.Pipeline(read, transform, output)
 
+//  val job =
+//    for {
+//      _ <- zio.ZIO.fail("sdfsdfdsfs")
+//    } yield {
+//      true
+//    }
+
   val job: ZIO[SparkSession, Throwable, Unit] =
     for {
       maybePeople <- pipeline.run
       _ <-
         maybePeople match {
-          case None    => Console.printLine("There is nobody :(.")
+          case None => Console.printLine("There is nobody :(.")
           case Some(p) => Console.printLine(s"The first person's name is ${p.name}.")
         }
     } yield ()
 
-  private val session = SparkSession.builder.master(localAllNodes).appName("app").asLayer
+  private val session = SparkSession.builder.master(yarn).appName("app").asLayer
+  // private val session = SparkSession.builder.master(localAllNodes).appName("app").asLayer
 
   override def run: ZIO[ZIOAppArgs, Any, Any] = job.provide(session)
 }
