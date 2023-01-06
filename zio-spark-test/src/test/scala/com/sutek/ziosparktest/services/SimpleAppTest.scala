@@ -1,27 +1,19 @@
 package com.sutek.ziosparktest.services
 
-import org.scalatest.flatspec.AnyFlatSpec
+import com.sutek.ziosparktest.services.SimpleApp._
 import zio.spark.parameter.localAllNodes
 import zio.spark.sql.SparkSession
+import zio.test.{ZIOSpecDefault, assertTrue}
 
-class SimpleAppTest extends AnyFlatSpec {
+object SimpleAppTest extends ZIOSpecDefault {
+  def spec = suite("SimpleAppSpec")(
+    test("SimpleApp works") {
+      val session = SparkSession.builder.master(localAllNodes).appName("app").asLayer
 
-  "A simple app " should "be able to red data" in {
-    val session = SparkSession.builder.master(localAllNodes).appName("app").asLayer
-
-    //    job.provide(session)
-
-    val job =
       for {
-        values <- zio.ZIO.fail("sdfsdfdsfs")
-        /*maybePeople <- pipeline.run
-        _ <- maybePeople match {
-            case None    => Console.printLine("There is nobody :(.")
-            case Some(p) => Console.printLine(s"The first person's name is ${p.name}.")
-          }*/
+        _ <- job.provide(session)
       } yield {
-        true
+        assertTrue(0 == 1 - 1)
       }
-
-    }
+    })
 }

@@ -19,7 +19,7 @@ lazy val root = (project in file("."))
       "org.apache.spark" %% "spark-core" % sparkVersion,
       // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
       "org.apache.spark" %% "spark-sql"    % sparkVersion,
-      "org.apache.spark" %% "spark-yarn" % sparkVersion, // % "provided"
+      // "org.apache.spark" %% "spark-yarn" % sparkVersion, // % "provided"
 
       // https://www.scalatest.org/
       "org.scalatest"    %% "scalatest"    % "3.2.14" % Test,

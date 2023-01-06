@@ -30,7 +30,7 @@ object SimpleApp extends ZIOAppDefault {
 //      true
 //    }
 
-  val job: ZIO[SparkSession, Throwable, Unit] =
+  val job: ZIO[SparkSession, Throwable, Unit] = {
     for {
       maybePeople <- pipeline.run
       _ <-
@@ -39,6 +39,7 @@ object SimpleApp extends ZIOAppDefault {
           case Some(p) => Console.printLine(s"The first person's name is ${p.name}.")
         }
     } yield ()
+  }
 
   private val session = SparkSession.builder.master(yarn).appName("app").asLayer
   // private val session = SparkSession.builder.master(localAllNodes).appName("app").asLayer
