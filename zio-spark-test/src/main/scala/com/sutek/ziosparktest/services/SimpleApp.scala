@@ -9,7 +9,6 @@ import zio.spark.sql._
 import zio.spark.sql.implicits._
 
 object SimpleApp extends ZIOAppDefault {
-
   import zio.spark.sql.TryAnalysis.syntax.throwAnalysisException
 
   final case class Person(name: String, age: Int)
@@ -23,13 +22,6 @@ object SimpleApp extends ZIOAppDefault {
 
   val pipeline: Pipeline[Row, Person, Option[Person]] = experimental.Pipeline(read, transform, output)
 
-//  val job =
-//    for {
-//      _ <- zio.ZIO.fail("sdfsdfdsfs")
-//    } yield {
-//      true
-//    }
-
   val job: ZIO[SparkSession, Throwable, Unit] = {
     for {
       maybePeople <- pipeline.run
@@ -41,8 +33,9 @@ object SimpleApp extends ZIOAppDefault {
     } yield ()
   }
 
+  // Use "yarn" in Cloud / Server side
+  // User "localAllNodes" in local side and test code
   private val session = SparkSession.builder.master(yarn).appName("app").asLayer
-  // private val session = SparkSession.builder.master(localAllNodes).appName("app").asLayer
 
   override def run: ZIO[ZIOAppArgs, Any, Any] = job.provide(session)
 }

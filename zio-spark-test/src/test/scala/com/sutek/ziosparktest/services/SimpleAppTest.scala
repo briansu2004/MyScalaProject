@@ -9,7 +9,6 @@ object SimpleAppTest extends ZIOSpecDefault {
   def spec = suite("SimpleAppSpec")(
     test("SimpleApp works") {
       val session = SparkSession.builder.master(localAllNodes).appName("app").asLayer
-
       for {
         _ <- job.provide(session)
       } yield {
